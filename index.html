@@ -403,11 +403,19 @@ window.addEventListener('load', updateOnlineStatus);
     document.getElementById('stIssue').innerText = st.iss;
     document.getElementById('binCount').innerText = bin.length;
 }
+
+
+        function save() {
+    localStorage.setItem('W_V36_DB', JSON.stringify(db));
+    localStorage.setItem('W_V36_BIN', JSON.stringify(bin));
+    localStorage.setItem('W_V36_BACKUP', JSON.stringify(db));
+}
     </script>
 </body>
 
 
 </html>
+
 
 
 
