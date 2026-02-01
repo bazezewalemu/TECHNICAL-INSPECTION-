@@ -1,233 +1,112 @@
 <!DOCTYPE html>
 <html lang="am">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>የቴክኒክ ምርመራ ቋት v37.1</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-         :root {
-            --primary: #004d40;
-            --accent: #c62828;
-            --blue: #1976d2;
-            --light: #f4f7f6;
-            --dark: #263238;
-            --excel: #1d6f42;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--light);
-            margin: 0;
-            padding: 5px;
-            font-size: 11px;
-        }
-        
-        .container {
-            max-width: 100%;
-            display: none;
-        }
-        
-        .header-box {
-            background: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            border-top: 4px solid var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 5px;
-        }
-        
-        .section-card {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            margin-bottom: 5px;
-        }
-        
-        .form-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            align-items: flex-end;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-        }
-        
-        .form-group label {
-            font-weight: bold;
-            font-size: 9px;
-            color: var(--primary);
-        }
-        
-        input,
-        select,
-        button {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            outline: none;
-            font-size: 11px;
-        }
-        
-        .btn {
-            cursor: pointer;
-            border: none;
-            font-weight: bold;
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            height: 30px;
-            border-radius: 4px;
-            padding: 0 8px;
-            gap: 4px;
-        }
-        
-        .btn-save {
-            background: var(--primary);
-        }
-        
-        .btn-blue {
-            background: var(--blue);
-        }
-        
-        .btn-red {
-            background: var(--accent);
-        }
-        
-        .controls-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            align-items: center;
-            background: #e1f5fe;
-            padding: 6px;
-            border-radius: 8px;
-            border: 1px solid #b3e5fc;
-            margin-bottom: 5px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            margin-top: 5px;
-            font-size: 10px;
-        }
-        
-        th,
-        td {
-            padding: 4px;
-            border: 1px solid #eee;
-            text-align: center;
-        }
-        
-        th {
-            background: #f5f5f5;
-            color: var(--primary);
-        }
-        
-        .summary-box {
-            background: var(--dark);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-            text-align: center;
-            margin-top: 5px;
-        }
-        
-        .bulk-box {
-            background: #fff3e0;
-            border: 1px solid #ffb74d;
-            padding: 8px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            display: none;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            .container {
-                display: block !important;
-            }
-        }
+        :root { --primary: #004d40; --accent: #c62828; --blue: #1976d2; --light: #f4f7f6; --dark: #263238; --excel: #1d6f42; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--light); margin: 0; padding: 5px; font-size: 11px; }
+        .container { max-width: 100%; display: none; }
+        .header-box { background: white; padding: 8px 15px; border-radius: 8px; border-top: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 5px; }
+        .section-card { background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 5px; }
+        .form-grid { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-end; }
+        .form-group { display: flex; flex-direction: column; gap: 1px; }
+        .form-group label { font-weight: bold; font-size: 9px; color: var(--primary); }
+        input, select, button { padding: 5px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-size: 11px; }
+        .btn { cursor: pointer; border: none; font-weight: bold; color: white; display: inline-flex; align-items: center; justify-content: center; height: 30px; border-radius: 4px; padding: 0 8px; gap: 4px; }
+        .btn-save { background: var(--primary); }
+        .btn-blue { background: var(--blue); }
+        .btn-red { background: var(--accent); }
+        .controls-row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; background: #e1f5fe; padding: 6px; border-radius: 8px; border: 1px solid #b3e5fc; margin-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 5px; font-size: 10px; }
+        th, td { padding: 4px; border: 1px solid #eee; text-align: center; }
+        th { background: #f5f5f5; color: var(--primary); }
+        .summary-box { background: var(--dark); color: white; padding: 10px; border-radius: 8px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; text-align: center; margin-top: 5px; }
+        .bulk-box { background: #fff3e0; border: 1px solid #ffb74d; padding: 8px; border-radius: 8px; margin-bottom: 5px; display: none; align-items: center; gap: 8px; }
+        @media print { .no-print { display: none !important; } .container { display: block !important; } }
     </style>
 </head>
-
 <body>
     <div id="loginScreen">
         <div style="background:white; padding:30px; border-radius:12px; width:260px; margin: 80px auto; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-            <h2 style="color:var(--primary)">የቴክኒክ ምርመራ v37.1</h2> <input type="text" id="uName" placeholder="ተጠቃሚ ስም" style="width:100%; margin-bottom:10px;"> <input type="password" id="uPass" placeholder="ፓስወርድ" style="width:100%; margin-bottom:20px;"> <button onclick="login()" class="btn btn-save"
-                style="width:100%">ግባ</button> </div>
+            <h2 style="color:var(--primary)">የቴክኒክ ምርመራ v37.1</h2> 
+            <input type="text" id="uName" placeholder="ተጠቃሚ ስም" style="width:100%; margin-bottom:10px;"> 
+            <input type="password" id="uPass" placeholder="ፓስወርድ" style="width:100%; margin-bottom:20px;"> 
+            <button onclick="login()" class="btn btn-save" style="width:100%">ግባ</button> 
+        </div>
     </div>
+
     <div class="container" id="appContainer">
         <div class="header-box">
             <div class="no-print">👤 <b id="displayUser" style="color:var(--blue)"></b> <span id="syncIndicator" style="font-size:9px; color:gray; margin-left:5px;">● Offline</span> </div>
-            <h3 style="margin:0; text-align: center; flex-grow:1;">የወልቃይት ጠገዴ ሰቲት ሁመራ ዞን የቴክኒክ ምርመራ ቋት</h3> <button onclick="logout()" class="btn btn-red no-print" style="height:22px; font-size:9px;">ውጣ</button> </div>
+            <h3 style="margin:0; text-align: center; flex-grow:1;">የወልቃይት ጠገዴ ሰቲት ሁመራ ዞን የቴክኒክ ምርመራ ቋት</h3> 
+            <button onclick="logout()" class="btn btn-red no-print" style="height:22px; font-size:9px;">ውጣ</button> 
+        </div>
+
         <div class="section-card no-print">
-            <div class="form-grid"> <input type="hidden" id="editIndex" value="-1">
+            <div class="form-grid"> 
+                <input type="hidden" id="editIndex" value="-1">
                 <div class="form-group"><label>ደረሰኝ</label><input id="receipt" type="text" style="width:60px;"></div>
                 <div class="form-group"><label>አይነት</label><select id="vType" style="width:85px;"><option>ባጃጅ</option><option>ሞተር</option><option>አነስተኛ</option><option>መለስተኛ</option><option>ከፍተኛ</option><option>ጭነት</option></select></div>
-                <div class="form-group"><label>ኮድ</label><select id="code" style="width:110px;"> <optgroup label="አዲስ አበባ"><option>አአ-1-</option><option>አአ-2-</option><option>አአ-3-</option><option>አአ-4-</option><option>አአ-5-</option></optgroup> <optgroup label="አማራ"><option>አማ-1-</option><option>አማ-2-</option><option>አማ-3-</option><option>አማ-4-</option><option>አማ-5-</option></optgroup> <optgroup label="ኦሮሚያ"><option>ኦሮ-1-</option><option>ኦሮ-2-</option><option>ኦሮ-3-</option><option>ኦሮ-4-</option><option>ኦሮ-5-</option></optgroup> <optgroup label="ሌሎች"><option>ደቡብ-</option><option>ሶማሌ-</option><option>አፋር-</option><option>ቤጉ-</option><option>ጋም-</option><option>ሐረ-</option><option>ድሬ-</option><option>ፌዴራል</option><option>ልዩ</option><option>UN</option> </select>                    </div>
+                <div class="form-group"><label>ኮድ</label>
+                    <select id="code" style="width:110px;"> 
+                        <optgroup label="አዲስ አበባ"><option>አአ-1-</option><option>አአ-2-</option><option>አአ-3-</option><option>አአ-4-</option><option>አአ-5-</option></optgroup> 
+                        <optgroup label="አማራ"><option>አማ-1-</option><option>አማ-2-</option><option>አማ-3-</option><option>አማ-4-</option><option>አማ-5-</option></optgroup> 
+                        <optgroup label="ሌሎች"><option>ኦሮ-</option><option>ደቡብ-</option><option>ሶማሌ-</option><option>አፋር-</option><option>ቤጉ-</option><option>ጋም-</option><option>ሐረ-</option><option>ድሬ-</option><option>ፌዴራል</option><option>ልዩ</option><option>UN</option> </select>
+                </div>
                 <div class="form-group"><label>ሰሌዳ</label><input id="plate" type="text" style="width:70px;"></div>
                 <div class="form-group"><label>ቀን</label>
-                    <div style="display:flex; gap:1px;"><select id="eDay" style="width:38px;"></select><select id="eMonth" style="width:75px;"><option value="01">መስከረም</option><option value="02">ጥቅምት</option><option value="03">ህዳር</option><option value="04">ታህሳስ</option><option value="05">ጥር</option><option value="06">የካቲት</option><option value="07">መጋቢት</option><option value="08">ሚያዝያ</option><option value="09">ግንቦት</option><option value="10">ሰኔ</option><option value="11">ሐምሌ</option><option value="12">ነሐሴ</option><option value="13">ጳጉሜን</option></select>
-                        <select id="eYear" style="width:55px;"></select>
-                    </div>
+                    <div style="display:flex; gap:1px;"><select id="eDay" style="width:38px;"></select>
+                    <select id="eMonth" style="width:75px;"><option value="01">መስከረም</option><option value="02">ጥቅምት</option><option value="03">ህዳር</option><option value="04">ታህሳስ</option><option value="05">ጥር</option><option value="06">የካቲት</option><option value="07">መጋቢት</option><option value="08">ሚያዝያ</option><option value="09">ግንቦት</option><option value="10">ሰኔ</option><option value="11">ሐምሌ</option><option value="12">ነሐሴ</option><option value="13">ጳጉሜን</option></select>
+                    <select id="eYear" style="width:55px;"></select></div>
                 </div>
                 <div class="form-group"><label>ባለሙያ</label><input id="inspector" type="text" style="width:95px;"></div>
-                <div class="form-group"><label>ቦታ</label><select id="location" style="width:110px;"> <option>ዞን</option><option>ወልቃይት</option><option>ጠገዴ</option><option>አውራ</option><option>ቤት ሞሎ</option><option>ቃፍትያ</option><option>ዳንሻ</option><option>ሰቲት</option><option>ማይካድራ</option><option>ቆራሪት</option> </select>                    </div>
+                <div class="form-group"><label>ቦታ</label><select id="location" style="width:110px;"><option>ዞን</option><option>ወልቃይት</option><option>ጠገዴ</option><option>አውራ</option><option>ቤት ሞሎ</option><option>ቃፍትያ</option><option>ዳንሻ</option><option>ሰቲት</option><option>ማይካድራ</option><option>ቆራሪት</option></select></div>
                 <div class="form-group"><label>ውጤት</label><select id="tech" style="width:100px;"><option value="ኖርማል">ኖርማል 🙏</option><option value="ችግር ያለበት">⚠️ ችግር ያለበት</option></select></div>
                 <div class="form-group"><label>ክፍያ</label><select id="payStatus" style="width:85px;"><option value="የከፈለ">የከፈለ ✅</option><option value="ያልከፈለ">ያልከፈለ ❌</option></select></div>
-                <div class="form-group"><label>ብር</label><input id="amount" type="number" style="width:60px;"></div> <img id="previewImg" style="width:30px; height:30px; display:none; border-radius:4px; border:1px solid #ccc;"> </div>
+                <div class="form-group"><label>ብር</label><input id="amount" type="number" style="width:60px;"></div> 
+                <img id="previewImg" style="width:30px; height:30px; display:none; border-radius:4px; border:1px solid #ccc;"> 
+            </div>
         </div>
-               <button onclick="loadFromCloud()" class="btn btn-blue" id="loadBtn" style="background:#6a1b9a;">📥 ሁሉንም አምጣ</button>
-        <div class="controls-row no-print"> <button onclick="document.getElementById('camFile').click()" class="btn" style="background:#546e7a;">📷</button><input type="file" id="camFile" accept="image/*" capture="environment" style="display:none" onchange="handleImage(this)"> <button id="saveBtn"
-                onclick="saveData()" class="btn btn-save">መዝግብ</button> <button id="cancelBtn" onclick="resetForm()" class="btn btn-red" style="display:none;">ተው</button>
-            <div style="width:1px; height:20px; background:#b3e5fc; margin:0 5px;"></div> <input type="date" id="reportFrom" onchange="render()" style="width:105px;"> <input type="date" id="reportTo" onchange="render()" style="width:105px;"> <input type="text" id="fSearch" placeholder="ሰሌዳ/ደረሰኝ..." oninput="render()" style="width:100px;">            <button onclick="syncToCloud()" class="btn btn-blue" id="syncBtn">☁️ Cloud</button> <button onclick="exportXl()" class="btn" style="background:var(--excel); color:white;">📤 Excel</button> <button onclick="document.getElementById('importFile').click()"
-                class="btn" style="background:#2e7d32;">📥 Import</button><input type="file" id="importFile" accept=".xlsx,.xls" onchange="autoProcessFile(this)" style="display:none"> <button onclick="recoverBackup()" class="btn" style="background:#607d8b;">🔄 Backup</button>            <button onclick="window.print()" class="btn" style="background:#455a64;">🖨 ሪፖርት</button> <button onclick="toggleBulkDelete()" class="btn" style="background:#ef6c00;">📅 በጅምላ</button> <button onclick="toggleBin()" class="btn btn-red">♻️ (<span id="binCount">0</span>)</button>
-            <div id="importStatus" style="font-size:9px;"></div>
+
+        <div class="controls-row no-print"> 
+            <button onclick="document.getElementById('camFile').click()" class="btn" style="background:#546e7a;">📷</button>
+            <input type="file" id="camFile" accept="image/*" capture="environment" style="display:none" onchange="handleImage(this)"> 
+            <button id="saveBtn" onclick="saveData()" class="btn btn-save">መዝግብ</button> 
+            <button id="cancelBtn" onclick="resetForm()" class="btn btn-red" style="display:none;">ተው</button>
+            <div style="width:1px; height:20px; background:#b3e5fc; margin:0 5px;"></div> 
+            <input type="date" id="reportFrom" onchange="render()" style="width:105px;"> 
+            <input type="date" id="reportTo" onchange="render()" style="width:105px;"> 
+            <input type="text" id="fSearch" placeholder="ሰሌዳ/ደረሰኝ..." oninput="render()" style="width:100px;">
+            <button onclick="syncToCloud()" class="btn btn-blue" id="syncBtn">☁️ Cloud</button> 
+            <button onclick="loadFromCloud()" class="btn" id="loadBtn" style="background:#6a1b9a;">📥 ሁሉንም አምጣ</button>
+            <button onclick="exportXl()" class="btn" style="background:var(--excel); color:white;">📤 Excel</button> 
+            <button onclick="document.getElementById('importFile').click()" class="btn" style="background:#2e7d32;">📥 Import</button>
+            <input type="file" id="importFile" accept=".xlsx,.xls" onchange="autoProcessFile(this)" style="display:none"> 
+            <button onclick="recoverBackup()" class="btn" style="background:#607d8b;">🔄 Backup</button> 
+            <button onclick="window.print()" class="btn" style="background:#455a64;">🖨 ሪፖርት</button> 
+            <button onclick="toggleBulkDelete()" class="btn" style="background:#ef6c00;">📅 በጅምላ</button> 
+            <button onclick="toggleBin()" class="btn btn-red">♻️ (<span id="binCount">0</span>)</button>
         </div>
+
         <div id="bulkDeleteBox" class="bulk-box no-print"> <b>ከተራ ቁጥር፡</b> <input type="number" id="bulkFrom" style="width:50px;"> <b>እስከ፡</b> <input type="number" id="bulkTo" style="width:50px;"> <button onclick="bulkDelete()" class="btn btn-red" style="height:25px;">❌ አጥፋ</button> </div>
+        
         <div id="recycleBin" style="display:none; padding:8px; background:#fff3f3; border:1px solid red; border-radius:8px; margin-bottom:5px;">
-            <div style="display:flex; justify-content:space-between;"><b>ቢን</b><button onclick="emptyBin()" class="btn btn-red" style="height:18px; font-size:9px;">ሁሉንም አጥፋ</button></div>
-            <div id="binList" style="max-height:120px; overflow-y:auto;"></div>
+            <div style="display:flex; justify-content:space-between;"><b>ቢን (Recycle Bin)</b><button onclick="emptyBin()" class="btn btn-red" style="height:18px; font-size:9px;">ሁሉንም አጥፋ</button></div>
+            <div id="binList" style="max-height:120px; overflow-y:auto; font-size:9px; margin-top:5px;"></div>
         </div>
+
         <table>
             <thead>
                 <tr>
-                    <th>ተ.ቁ</th>
-                    <th>ፎቶ</th>
-                    <th>ደረሰኝ</th>
-                    <th>አይነት</th>
-                    <th>ሰሌዳ</th>
-                    <th>ቀን</th>
-                    <th>ባለሙያ</th>
-                    <th>ቦታ</th>
-                    <th>ውጤት</th>
-                    <th>ክፍያ</th>
-                    <th>ብር</th>
-                    <th class="no-print">እርምጃ</th>
+                    <th>ተ.ቁ</th><th>ፎቶ</th><th>ደረሰኝ</th><th>አይነት</th><th>ሰሌዳ</th><th>ቀን</th><th>ባለሙያ</th><th>ቦታ</th><th>ውጤት</th><th>ክፍያ</th><th>ብር</th><th class="no-print">እርምጃ</th>
                 </tr>
             </thead>
             <tbody id="dataTableBody"></tbody>
         </table>
+
         <div class="summary-box">
             <div class="stat-item">ጠቅላላ ተሽከርካሪ: <b id="stTotal" style="color:#4fc3f7;">0</b></div>
             <div class="stat-item">ጠቅላላ ገቢ: <b id="stIncome" style="color:#4fc3f7;">0</b> ብር</div>
@@ -235,102 +114,44 @@
             <div class="stat-item">ችግር ያለባቸው ⚠️: <b id="stIssue" style="color:#ef5350;">0</b></div>
         </div>
     </div>
+
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzdL2xhfYz7bwyVZ7Tx2lJKH23aFPlMKGLUFNlHPjzM99q6USYLcS6KeLJ8wp3c9vCEA/exec";
         let db = JSON.parse(localStorage.getItem('W_V36_DB') || '[]');
         let bin = JSON.parse(localStorage.getItem('W_V36_BIN') || '[]');
         let currentImg = "";
-// ኢንተርኔት መኖር አለመኖሩን የሚከታተል ተግባር
-function updateOnlineStatus() {
-    const indicator = document.getElementById('syncIndicator');
-    if (navigator.onLine) {
-        indicator.innerHTML = "● Online";
-        indicator.style.color = "#4caf50"; // አረንጓዴ
-    } else {
-        indicator.innerHTML = "● Offline";
-        indicator.style.color = "gray"; // ግራጫ
-    }
-}
 
-// ኢንተርኔት ሲመጣና ሲሄድ በራሱ እንዲቀይር
-window.addEventListener('online', updateOnlineStatus);
-window.addEventListener('offline', updateOnlineStatus);
-
-// ገጹ ሲከፈት መጀመሪያ ያለውን ሁኔታ ለማወቅ
-window.addEventListener('load', updateOnlineStatus);
-       async function loadFromCloud() {
-    const pass = prompt("የአድሚን ሚስጥር ቁልፍ ያስገቡ፡");
-    if (pass !== "1313") return alert("አልተፈቀደልዎትም!"); // ሚስጥር ቁልፍህ
-
-    const btn = document.getElementById('loadBtn');
-    btn.innerText = "⏳ በማምጣት ላይ...";
-    
-    try {
-        const response = await fetch(SCRIPT_URL);
-        const cloudData = await response.json();
-        
-        if (cloudData.length > 0) {
-            db = cloudData; // የአሁኑን ዳታ በ Cloud ዳታ መተካት
-            save(); // ወደ Local Storage ሴቭ ማድረግ
-            render(); // ሰንጠረዡን ማደስ
-            alert("ሁሉም መረጃዎች ከ Cloud ወርደዋል!");
-        } else {
-            alert("በ Cloud ላይ ምንም መረጃ የለም!");
-        }
-    } catch (e) {
-        alert("መረጃውን ማምጣት አልተቻለም፦ " + e);
-    } finally {
-        btn.innerText = "📥 ሁሉንም አምጣ";
-    }
-}
+        // --- Auth Functions ---
         function login() {
             if (document.getElementById('uPass').value === "1313") {
                 sessionStorage.setItem('isLogged', 'true');
                 sessionStorage.setItem('activeUser', document.getElementById('uName').value || "Admin");
                 initApp();
-            } else {
-                alert("ተሳስቷል!");
-            }
+            } else { alert("የተሳሳተ ፓስወርድ!"); }
         }
-
+        function logout() { sessionStorage.clear(); location.reload(); }
         function initApp() {
             if (sessionStorage.getItem('isLogged')) {
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'block';
                 document.getElementById('displayUser').innerText = sessionStorage.getItem('activeUser');
-                setupForm();
-                render();
+                setupForm(); render(); updateOnlineStatus();
             }
         }
         window.onload = initApp;
 
+        // --- Core Functions ---
         function setupForm() {
-            const d = document.getElementById('eDay'),
-                y = document.getElementById('eYear');
-            d.innerHTML = "";
-            y.innerHTML = "";
+            const d = document.getElementById('eDay'), y = document.getElementById('eYear');
+            d.innerHTML = ""; y.innerHTML = "";
             for (let i = 1; i <= 30; i++) d.innerHTML += `<option>${i.toString().padStart(2,'0')}</option>`;
             for (let i = 2015; i <= 2030; i++) y.innerHTML += `<option ${i===2017?'selected':''}>${i}</option>`;
         }
 
-        function handleImage(input) {
-            if (input.files && input.files[0]) {
-                const r = new FileReader();
-                r.onload = e => {
-                    currentImg = e.target.result;
-                    document.getElementById('previewImg').src = currentImg;
-                    document.getElementById('previewImg').style.display = 'block';
-                };
-                r.readAsDataURL(input.files[0]);
-            }
-        }
-
         function saveData() {
             const p = document.getElementById('plate').value;
-            if (!p) return alert("ሰሌዳ?");
-            const d = document.getElementById('eDay').value,
-                m = document.getElementById('eMonth').value,
-                y = document.getElementById('eYear').value;
+            if (!p) return alert("እባክህ የሰሌዳ ቁጥር አስገባ!");
+            const d = document.getElementById('eDay').value, m = document.getElementById('eMonth').value, y = document.getElementById('eYear').value;
             const data = {
                 receipt: document.getElementById('receipt').value,
                 vType: document.getElementById('vType').value,
@@ -347,76 +168,181 @@ window.addEventListener('load', updateOnlineStatus);
                 isoDate: new Date().toISOString()
             };
             const idx = parseInt(document.getElementById('editIndex').value);
-            if (idx > -1) db[idx] = data;
-            else db.unshift(data);
-            save();
-            render();
-            resetForm();
-            if (navigator.onLine && SCRIPT_URL.length > 20) syncToCloud();
+            if (idx > -1) db[idx] = data; else db.unshift(data);
+            save(); render(); resetForm();
+            if (navigator.onLine) syncToCloud();
         }
- function render() {
-    const b = document.getElementById('dataTableBody'),
-        s = document.getElementById('fSearch').value.toLowerCase(),
-        f = document.getElementById('reportFrom').value,
-        t = document.getElementById('reportTo').value;
-    b.innerHTML = '';
-    let st = { inc: 0, tot: 0, n: 0, iss: 0 };
 
-    db.forEach((d, i) => {
-        const dt = d.filterDate || "";
-        
-        // ስህተቱን ፊክስ የተደረገበት ቦታ፡
-        const plateStr = String(d.plate || "");
-        const receiptStr = String(d.receipt || "");
-        const mS = (plateStr + receiptStr).toLowerCase().includes(s);
-        
-        const mD = (!f || dt >= f) && (!t || dt <= t);
+        function render() {
+            const b = document.getElementById('dataTableBody'), s = document.getElementById('fSearch').value.toLowerCase(),
+                f = document.getElementById('reportFrom').value, t = document.getElementById('reportTo').value;
+            b.innerHTML = '';
+            let st = { inc: 0, tot: 0, n: 0, iss: 0 };
 
-        if (mS && mD) {
-            st.tot++;
-            st.inc += Number(d.amount) || 0;
-            d.tech === 'ኖርማል' ? st.n++ : st.iss++;
-            
-            b.innerHTML += `<tr>
-                <td>${st.tot}</td>
-                <td>${d.photo ? `<img src="${d.photo}" style="width:18px;">` : '-'}</td>
-                <td>${d.receipt}</td>
-                <td>${d.vType}</td>
-                <td><b>${d.code || ""}${d.plate}</b></td>
-                <td>${d.date}</td>
-                <td>${d.inspector}</td>
-                <td>${d.location}</td>
-                <td style="color:${d.tech === 'ኖርማል' ? 'blue' : 'red'}">${d.tech}</td>
-                <td>${d.payStatus}</td>
-                <td>${d.amount}</td>
-                <td class="no-print">
-                    <button onclick="editItem(${i})">✏️</button>
-                    <button onclick="moveToBin(${i})">🗑️</button>
-                </td>
-            </tr>`;
+            db.forEach((d, i) => {
+                const plateStr = String(d.plate || ""), receiptStr = String(d.receipt || "");
+                const mS = (plateStr + receiptStr).toLowerCase().includes(s);
+                const mD = (!f || d.filterDate >= f) && (!t || d.filterDate <= t);
+                if (mS && mD) {
+                    st.tot++; st.inc += Number(d.amount) || 0;
+                    d.tech === 'ኖርማል' ? st.n++ : st.iss++;
+                    b.innerHTML += `<tr>
+                        <td>${st.tot}</td>
+                        <td>${d.photo ? `<img src="${d.photo}" style="width:18px;">` : '-'}</td>
+                        <td>${d.receipt}</td><td>${d.vType}</td><td><b>${d.code || ""}${d.plate}</b></td>
+                        <td>${d.date}</td><td>${d.inspector}</td><td>${d.location}</td>
+                        <td style="color:${d.tech === 'ኖርማል' ? 'blue' : 'red'}">${d.tech}</td>
+                        <td>${d.payStatus}</td><td>${d.amount}</td>
+                        <td class="no-print">
+                            <button onclick="editItem(${i})">✏️</button>
+                            <button onclick="moveToBin(${i})">🗑️</button>
+                        </td></tr>`;
+                }
+            });
+            document.getElementById('stTotal').innerText = st.tot;
+            document.getElementById('stIncome').innerText = st.inc;
+            document.getElementById('stNormal').innerText = st.n;
+            document.getElementById('stIssue').innerText = st.iss;
+            document.getElementById('binCount').innerText = bin.length;
         }
-    });
 
-    document.getElementById('stTotal').innerText = st.tot;
-    document.getElementById('stIncome').innerText = st.inc;
-    document.getElementById('stNormal').innerText = st.n;
-    document.getElementById('stIssue').innerText = st.iss;
-    document.getElementById('binCount').innerText = bin.length;
-}
+        function editItem(i) {
+            const d = db[i];
+            document.getElementById('receipt').value = d.receipt;
+            document.getElementById('plate').value = d.plate;
+            document.getElementById('amount').value = d.amount;
+            document.getElementById('inspector').value = d.inspector;
+            document.getElementById('editIndex').value = i;
+            document.getElementById('saveBtn').innerText = "አድስ";
+            document.getElementById('cancelBtn').style.display = "inline";
+            window.scrollTo(0,0);
+        }
 
+        function moveToBin(i) {
+            if(confirm("ወደ ቢን ይዛወር?")) {
+                bin.push(db[i]);
+                db.splice(i, 1);
+                save(); render(); updateBinList();
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('receipt').value = "";
+            document.getElementById('plate').value = "";
+            document.getElementById('amount').value = "";
+            document.getElementById('saveBtn').innerText = "መዝግብ";
+            document.getElementById('cancelBtn').style.display = "none";
+            document.getElementById('previewImg').style.display = "none";
+            currentImg = "";
+        }
+
+        // --- Cloud & Sync ---
+        async function syncToCloud() {
+            const indicator = document.getElementById('syncIndicator');
+            indicator.innerText = "● Syncing...";
+            try {
+                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(db) });
+                indicator.innerText = "● Synced"; indicator.style.color = "#4caf50";
+            } catch (e) { indicator.innerText = "● Error"; indicator.style.color = "red"; }
+        }
+
+        async function loadFromCloud() {
+            const pass = prompt("የአድሚን ሚስጥር ቁልፍ ያስገቡ፡");
+            if (pass !== "1313") return alert("አልተፈቀደልዎትም!");
+            const btn = document.getElementById('loadBtn');
+            btn.innerText = "⏳ በማምጣት ላይ...";
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const cloudData = await response.json();
+                if (cloudData.length > 0) {
+                    db = cloudData.map(d => ({...d, plate: String(d.plate), receipt: String(d.receipt)}));
+                    save(); render(); alert("ሁሉም መረጃዎች ከ Cloud ወርደዋል!");
+                }
+            } catch (e) { alert("ስህተት፡ " + e); }
+            finally { btn.innerText = "📥 ሁሉንም አምጣ"; }
+        }
+
+        // --- Extra Tools ---
+        function exportXl() {
+            const ws = XLSX.utils.json_to_sheet(db);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Technical_Data");
+            XLSX.writeFile(wb, "Technical_Report.xlsx");
+        }
+
+        function autoProcessFile(input) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                db = jsonData; save(); render(); alert("ኢምፖርት ተደርጓል!");
+            };
+            reader.readAsArrayBuffer(input.files[0]);
+        }
+
+        function toggleBin() {
+            const binDiv = document.getElementById('recycleBin');
+            binDiv.style.display = binDiv.style.display === 'none' ? 'block' : 'none';
+            updateBinList();
+        }
+
+        function updateBinList() {
+            const list = document.getElementById('binList');
+            list.innerHTML = bin.map((item, i) => `<div>${item.plate} - ${item.date} <button onclick="restore(${i})">🔄</button></div>`).join('');
+        }
+
+        function restore(i) {
+            db.push(bin[i]); bin.splice(i, 1); save(); render(); updateBinList();
+        }
+
+        function emptyBin() { if(confirm("ቢን ይጥፋ?")) { bin = []; save(); render(); updateBinList(); } }
+
+        function handleImage(input) {
+            if (input.files && input.files[0]) {
+                const r = new FileReader();
+                r.onload = e => {
+                    currentImg = e.target.result;
+                    document.getElementById('previewImg').src = currentImg;
+                    document.getElementById('previewImg').style.display = 'block';
+                };
+                r.readAsDataURL(input.files[0]);
+            }
+        }
 
         function save() {
-    localStorage.setItem('W_V36_DB', JSON.stringify(db));
-    localStorage.setItem('W_V36_BIN', JSON.stringify(bin));
-    localStorage.setItem('W_V36_BACKUP', JSON.stringify(db));
-}
+            localStorage.setItem('W_V36_DB', JSON.stringify(db));
+            localStorage.setItem('W_V36_BIN', JSON.stringify(bin));
+        }
+
+        function updateOnlineStatus() {
+            const indicator = document.getElementById('syncIndicator');
+            if (navigator.onLine) { indicator.innerHTML = "● Online"; indicator.style.color = "#4caf50"; }
+            else { indicator.innerHTML = "● Offline"; indicator.style.color = "gray"; }
+        }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        function toggleBulkDelete() {
+            const box = document.getElementById('bulkDeleteBox');
+            box.style.display = box.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function bulkDelete() {
+            const from = parseInt(document.getElementById('bulkFrom').value) - 1;
+            const to = parseInt(document.getElementById('bulkTo').value);
+            if(confirm(`${from+1} እስከ ${to} ያሉ መረጃዎች ይጥፉ?`)) {
+                db.splice(from, to - from);
+                save(); render();
+            }
+        }
+
+        function recoverBackup() {
+            const backup = localStorage.getItem('W_V36_BACKUP');
+            if(backup) { db = JSON.parse(backup); render(); alert("ባክአፕ ተመልሷል!"); }
+        }
     </script>
 </body>
-
-
 </html>
-
-
-
-
-
