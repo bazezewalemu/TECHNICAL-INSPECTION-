@@ -239,7 +239,25 @@
         let db = JSON.parse(localStorage.getItem('W_V36_DB') || '[]');
         let bin = JSON.parse(localStorage.getItem('W_V36_BIN') || '[]');
         let currentImg = "";
+// ኢንተርኔት መኖር አለመኖሩን የሚከታተል ተግባር
+function updateOnlineStatus() {
+    const indicator = document.getElementById('syncIndicator');
+    if (navigator.onLine) {
+        indicator.innerHTML = "● Online";
+        indicator.style.color = "#4caf50"; // አረንጓዴ
+    } else {
+        indicator.innerHTML = "● Offline";
+        indicator.style.color = "gray"; // ግራጫ
+    }
+}
 
+// ኢንተርኔት ሲመጣና ሲሄድ በራሱ እንዲቀይር
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+// ገጹ ሲከፈት መጀመሪያ ያለውን ሁኔታ ለማወቅ
+window.addEventListener('load', updateOnlineStatus);
+       
         function login() {
             if (document.getElementById('uPass').value === "1313") {
                 sessionStorage.setItem('isLogged', 'true');
@@ -338,4 +356,5 @@
 
 
 </html>
+
 
