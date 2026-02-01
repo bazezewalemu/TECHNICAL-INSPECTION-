@@ -354,33 +354,61 @@ window.addEventListener('load', updateOnlineStatus);
             resetForm();
             if (navigator.onLine && SCRIPT_URL.length > 20) syncToCloud();
         }
+ function render() {
+    const b = document.getElementById('dataTableBody'),
+        s = document.getElementById('fSearch').value.toLowerCase(),
+        f = document.getElementById('reportFrom').value,
+        t = document.getElementById('reportTo').value;
+    b.innerHTML = '';
+    let st = { inc: 0, tot: 0, n: 0, iss: 0 };
 
-        function render() {
-            const b = document.getElementById('dataTableBody'),
-                s = document.getElementById('fSearch').value.toLowerCase(),
-                f = document.getElementById('reportFrom').value,
-                t = document.getElementById('reportTo').value;
-            b.innerHTML = '';
-            let st = {
-                inc: 0,
-                tot: 0,
-                n: 0,
-                iss: 0
-            };
-            db.forEach((d, i) => {
-                        const dt = d.filterDate || "",
-                            mS = (d.plate + d.receipt).toLowerCase().includes(s),
-                            mD = (!f || dt >= f) && (!t || dt <= t);
-                        if (mS && mD) {
-                            st.tot++;
-                            st.inc += d.amount;
-                            d.tech === 'ኖርማል' ? st.n++ : st.iss++;
-                            b.innerHTML += `<tr><td>${st.tot}</td><td>${d.photo?`<img src="${d.photo}" style="width:18px;">`:'-'}</td><td>${d.receipt}</td><td>${d.vType}</td><td><b>${d.code}${d.plate}</b></td><td>${d.date}</td><td>${d.inspector}</td><td>${d.location}</td><td style="color:${d.tech==='ኖርማል'?'blue':'red'}">${d.tech}</td><td>${d.payStatus}</td><td>${d.amount}</td><td class="no-print"><button onclick="editItem(${i})">✏️</button><button onclick="moveToBin(${i})">🗑️</button></td></tr>`; }}); document.getElementById('stTotal').innerText=st.tot; document.getElementById('stIncome').innerText=st.inc; document.getElementById('stNormal').innerText=st.n; document.getElementById('stIssue').innerText=st.iss; document.getElementById('binCount').innerText=bin.length;} function save(){ localStorage.setItem('W_V36_DB',JSON.stringify(db)); localStorage.setItem('W_V36_BIN',JSON.stringify(bin)); localStorage.setItem('W_V36_BACKUP',JSON.stringify(db));} function resetForm(){ document.getElementById('plate').value=''; document.getElementById('receipt').value=''; document.getElementById('editIndex').value='-1'; document.getElementById('saveBtn').innerText='መዝግብ'; document.getElementById('cancelBtn').style.display='none'; document.getElementById('previewImg').style.display='none'; currentImg="";} function moveToBin(i){bin.push(db[i]); db.splice(i,1); save(); render();} function toggleBin(){ const d=document.getElementById('recycleBin'); d.style.display=d.style.display==='none'?'block':'none'; updateBinUI();} function updateBinUI(){ const l=document.getElementById('binList'); l.innerHTML=bin.length===0?'ባዶ ነው':''; bin.forEach((it,i)=>{l.innerHTML+=`<div style="display:flex; justify-content:space-between; padding:2px; border-bottom:1px solid #ddd;"><span>${it.plate}</span><div><button onclick="restoreBin(${i})">🔄</button><button onclick="permDelete(${i})">❌</button></div></div>`;});} function restoreBin(i){db.unshift(bin[i]); bin.splice(i,1); save(); render(); updateBinUI();} function permDelete(i){if(confirm("ይጥፋ?")){bin.splice(i,1); save(); render(); updateBinUI();}} function emptyBin(){if(confirm("ሁሉንም?")){bin=[]; save(); render(); updateBinUI();}} function editItem(i){ const d=db[i]; document.getElementById('receipt').value=d.receipt; document.getElementById('plate').value=d.plate; document.getElementById('editIndex').value=i; document.getElementById('saveBtn').innerText='አድስ'; document.getElementById('cancelBtn').style.display='inline'; window.scrollTo(0,0);} function toggleBulkDelete(){ const b=document.getElementById('bulkDeleteBox'); b.style.display=b.style.display==='flex'?'none':'flex';} function bulkDelete(){ const f=parseInt(document.getElementById('bulkFrom').value), t=parseInt(document.getElementById('bulkTo').value); if(!f||!t)return alert("ቁጥር ይሙሉ!"); if(confirm("በጅምላ ይጥፋ?")){ const toDel = db.slice(f-1, t); bin.push(...toDel); db.splice(f-1, t-f+1); save(); render(); alert("ተሰርዟል!"); }} async function syncToCloud(){ const btn=document.getElementById('syncBtn'); try{ await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(db)}); btn.innerText="✅ Cloud"; setTimeout(()=>btn.innerText="☁️ Cloud",2000); }catch(e){}} function exportXl(){ const ws=XLSX.utils.json_to_sheet(db.map(({photo,isoDate,filterDate,...r})=>r)); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Report"); XLSX.writeFile(wb,"Tech_Report.xlsx");} function recoverBackup(){ const b=localStorage.getItem('W_V36_BACKUP'); if(b&&confirm("ይመለስ?")){db=JSON.parse(b); save(); render();}} function logout(){sessionStorage.clear(); location.reload();} function autoProcessFile(input){ const f=input.files[0]; if(!f)return; const r=new FileReader(); r.onload=e=>{ const d=new Uint8Array(e.target.result), wb=XLSX.read(d,{type:'array'}), json=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]); processImportedData(json);}; r.readAsArrayBuffer(f);} function processImportedData(data){ data.forEach(r=>{ const n={receipt:r.receipt||r['ደረሰኝ']||"", vType:r.vType||"አነስተኛ", code:r.code||"", plate:r.plate||r['ሰሌዳ']||"", inspector:r.inspector||"", date:r.date||"", filterDate:r.filterDate||"", location:r.location||"", tech:r.tech||"ኖርማል", payStatus:r.payStatus||"የከፈለ", amount:Number(r.amount)||0, photo:"", isoDate:new Date().toISOString()}; if(n.plate)db.push(n);}); save(); render(); alert("ገባ!");}
+    db.forEach((d, i) => {
+        const dt = d.filterDate || "";
+        
+        // ስህተቱን ፊክስ የተደረገበት ቦታ፡
+        const plateStr = String(d.plate || "");
+        const receiptStr = String(d.receipt || "");
+        const mS = (plateStr + receiptStr).toLowerCase().includes(s);
+        
+        const mD = (!f || dt >= f) && (!t || dt <= t);
+
+        if (mS && mD) {
+            st.tot++;
+            st.inc += Number(d.amount) || 0;
+            d.tech === 'ኖርማል' ? st.n++ : st.iss++;
+            
+            b.innerHTML += `<tr>
+                <td>${st.tot}</td>
+                <td>${d.photo ? `<img src="${d.photo}" style="width:18px;">` : '-'}</td>
+                <td>${d.receipt}</td>
+                <td>${d.vType}</td>
+                <td><b>${d.code || ""}${d.plate}</b></td>
+                <td>${d.date}</td>
+                <td>${d.inspector}</td>
+                <td>${d.location}</td>
+                <td style="color:${d.tech === 'ኖርማል' ? 'blue' : 'red'}">${d.tech}</td>
+                <td>${d.payStatus}</td>
+                <td>${d.amount}</td>
+                <td class="no-print">
+                    <button onclick="editItem(${i})">✏️</button>
+                    <button onclick="moveToBin(${i})">🗑️</button>
+                </td>
+            </tr>`;
+        }
+    });
+
+    document.getElementById('stTotal').innerText = st.tot;
+    document.getElementById('stIncome').innerText = st.inc;
+    document.getElementById('stNormal').innerText = st.n;
+    document.getElementById('stIssue').innerText = st.iss;
+    document.getElementById('binCount').innerText = bin.length;
+}
     </script>
 </body>
 
 
 </html>
+
 
 
 
