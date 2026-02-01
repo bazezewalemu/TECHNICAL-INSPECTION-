@@ -197,6 +197,7 @@
                 <div class="form-group"><label>ክፍያ</label><select id="payStatus" style="width:85px;"><option value="የከፈለ">የከፈለ ✅</option><option value="ያልከፈለ">ያልከፈለ ❌</option></select></div>
                 <div class="form-group"><label>ብር</label><input id="amount" type="number" style="width:60px;"></div> <img id="previewImg" style="width:30px; height:30px; display:none; border-radius:4px; border:1px solid #ccc;"> </div>
         </div>
+               <button onclick="loadFromCloud()" class="btn btn-blue" id="loadBtn" style="background:#6a1b9a;">📥 ሁሉንም አምጣ</button>
         <div class="controls-row no-print"> <button onclick="document.getElementById('camFile').click()" class="btn" style="background:#546e7a;">📷</button><input type="file" id="camFile" accept="image/*" capture="environment" style="display:none" onchange="handleImage(this)"> <button id="saveBtn"
                 onclick="saveData()" class="btn btn-save">መዝግብ</button> <button id="cancelBtn" onclick="resetForm()" class="btn btn-red" style="display:none;">ተው</button>
             <div style="width:1px; height:20px; background:#b3e5fc; margin:0 5px;"></div> <input type="date" id="reportFrom" onchange="render()" style="width:105px;"> <input type="date" id="reportTo" onchange="render()" style="width:105px;"> <input type="text" id="fSearch" placeholder="ሰሌዳ/ደረሰኝ..." oninput="render()" style="width:100px;">            <button onclick="syncToCloud()" class="btn btn-blue" id="syncBtn">☁️ Cloud</button> <button onclick="exportXl()" class="btn" style="background:var(--excel); color:white;">📤 Excel</button> <button onclick="document.getElementById('importFile').click()"
@@ -257,7 +258,31 @@ window.addEventListener('offline', updateOnlineStatus);
 
 // ገጹ ሲከፈት መጀመሪያ ያለውን ሁኔታ ለማወቅ
 window.addEventListener('load', updateOnlineStatus);
-       
+       async function loadFromCloud() {
+    const pass = prompt("የአድሚን ሚስጥር ቁልፍ ያስገቡ፡");
+    if (pass !== "1313") return alert("አልተፈቀደልዎትም!"); // ሚስጥር ቁልፍህ
+
+    const btn = document.getElementById('loadBtn');
+    btn.innerText = "⏳ በማምጣት ላይ...";
+    
+    try {
+        const response = await fetch(SCRIPT_URL);
+        const cloudData = await response.json();
+        
+        if (cloudData.length > 0) {
+            db = cloudData; // የአሁኑን ዳታ በ Cloud ዳታ መተካት
+            save(); // ወደ Local Storage ሴቭ ማድረግ
+            render(); // ሰንጠረዡን ማደስ
+            alert("ሁሉም መረጃዎች ከ Cloud ወርደዋል!");
+        } else {
+            alert("በ Cloud ላይ ምንም መረጃ የለም!");
+        }
+    } catch (e) {
+        alert("መረጃውን ማምጣት አልተቻለም፦ " + e);
+    } finally {
+        btn.innerText = "📥 ሁሉንም አምጣ";
+    }
+}
         function login() {
             if (document.getElementById('uPass').value === "1313") {
                 sessionStorage.setItem('isLogged', 'true');
@@ -356,5 +381,6 @@ window.addEventListener('load', updateOnlineStatus);
 
 
 </html>
+
 
 
